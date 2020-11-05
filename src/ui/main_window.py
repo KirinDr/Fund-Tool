@@ -39,6 +39,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.fig = None
 
     def init_fig(self):
+        for i in range(self.horizontal_layout.count()):
+            self.horizontal_layout.itemAt(i).widget().deleteLater()
         self.fig = MatplotWidget()
         self.horizontal_layout.addWidget(self.fig)
 
@@ -59,13 +61,13 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         if self.check_input():
             code = self.get_code()
             st, en = self.get_date()
+            print('request for %s ...' % self.get_code())
             df = fund_information(code, st, en)
             if df is not None:
                 self.set_val(df['净值日期'], df['单位净值'])
 
     def set_val(self, x, y):
-        if self.fig is None:
-            self.init_fig()
+        self.init_fig()
         self.fig.plot(x, y, 'b', '估值')
 
 
