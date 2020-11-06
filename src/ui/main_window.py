@@ -9,7 +9,8 @@ matplotlib.use("Qt5Agg")
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from basic.fund_handle import fund_information, get_ma
-from basic.NoticeUtil import notice
+from basic.notice_util import notice
+from basic.config import *
 
 
 class MatplotWidget(FigureCanvas):
@@ -81,7 +82,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
     def set_val(self, x, y):
         self.init_fig()
-        self.fig.plot(x, y, 'b', '估值')
+        self.fig.plot(x, y, VAL_COLOR, VAL_LABEL)
 
     def set_ma(self, x, y, color, label):
         self.fig.plot(x, y, color, label)
@@ -89,8 +90,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     def repaint(self):
         self.set_val(self.df['净值日期'], self.df['单位净值'])
         if self.macd.isChecked():
-            self.set_ma(self.ma10['净值日期'], self.ma10['单位净值'], 'k', 'MA10')
-            self.set_ma(self.ma20['净值日期'], self.ma20['单位净值'], 'r', 'MA20')
+            self.set_ma(self.ma10['净值日期'], self.ma10['单位净值'], MA10_COLOR, MA10_LABEL)
+            self.set_ma(self.ma20['净值日期'], self.ma20['单位净值'], MA20_COLOR, MA20_LABEL)
         self.fig.finished()
 
 

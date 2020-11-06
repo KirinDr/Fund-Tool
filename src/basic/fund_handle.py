@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 import numpy as np
 import pandas as pd
-from basic.NoticeUtil import notice
+from basic.notice_util import notice
 import matplotlib.pyplot as plt
 # 中文设置
 plt.rcParams['font.sans-serif']=['SimHei']
