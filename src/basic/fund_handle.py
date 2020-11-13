@@ -26,7 +26,8 @@ def request(code, sdate, edate, page):
     return r.text
 
 
-def fund_information(code, sdate, edate):
+def fund_information(code, sdate, edate, begin):
+    begin = pd.to_datetime(begin, format='%Y/%m/%d')
     ret = request(code, sdate, edate, 1)
     soup = BeautifulSoup(ret, 'html.parser')
 
@@ -65,12 +66,13 @@ def fund_information(code, sdate, edate):
     df = df.set_index('净值日期', drop=False)
     df.sort_index(ascending=True, inplace=True)
 
-    return df
+    return df, df[df['净值日期'] >= begin]
 
 
 def get_ma(n, df):
     if df.shape[0] < n:
         return None
+
     date_time = []
     ma = []
 
@@ -91,6 +93,49 @@ def get_ma(n, df):
 
     return n_df
 
+
+
+def get_dif(ma12, ma26):
+    # MA12和MA26时间对齐
+    if ma12.shape[0] != ma26.shape[0]:
+        min_date = ma26.iloc[0,].loc['净值日期']
+        ma12 = ma12[ma12['净值日期'] >= min_date]
+
+    dif = []
+    date_time = []
+
+    for i in range(ma12.shape[0]):
+        date_time.append(ma12.iloc[i,].loc['净值日期'])
+        dif.append(ma12.iloc[i,].loc['单位净值'] - ma26.iloc[i,].loc['单位净值'])
+
+    n_df = pd.DataFrame()
+    n_df['净值日期'] = pd.to_datetime(date_time, format='%Y/%m/%d')
+    n_df['单位净值'] = dif
+    return n_df
+
+
+def get_dea(dif):
+    n = 9
+    return get_ma(n, dif)
+
+
+def get_macd_bar(dif, dea):
+    # 时间对齐
+    if dif.shape[0] != dea.shape[0]:
+        min_date = dea.iloc[0,].loc['净值日期']
+        dif = dif[dif['净值日期'] >= min_date]
+
+    bar = []
+    date_time = []
+
+    for i in range(dif.shape[0]):
+        date_time.append(dif.iloc[i,].loc['净值日期'])
+        bar.append((dif.iloc[i,].loc['单位净值'] - dea.iloc[i,].loc['单位净值']) * 2)
+
+    n_df = pd.DataFrame()
+    n_df['净值日期'] = pd.to_datetime(date_time, format='%Y/%m/%d')
+    n_df['单位净值'] = bar
+    return n_df
 
 
 

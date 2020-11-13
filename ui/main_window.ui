@@ -23,7 +23,7 @@
      <height>0</height>
     </size>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <property name="sizeConstraint">
@@ -98,7 +98,7 @@ p, li { white-space: pre-wrap; }
          </font>
         </property>
         <property name="text">
-         <string>起始时间</string>
+         <string>时间跨度</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -106,82 +106,43 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
-       <widget class="QDateTimeEdit" name="start_time">
+       <widget class="QComboBox" name="choose_time">
         <property name="minimumSize">
          <size>
-          <width>88</width>
-          <height>0</height>
+          <width>90</width>
+          <height>27</height>
          </size>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>28</height>
-         </size>
-        </property>
-        <property name="accelerated">
-         <bool>true</bool>
-        </property>
-        <property name="date">
-         <date>
-          <year>2000</year>
-          <month>1</month>
-          <day>2</day>
-         </date>
-        </property>
-        <property name="displayFormat">
-         <string>yyyy-MM-dd</string>
-        </property>
-        <property name="calendarPopup">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="minimumSize">
-         <size>
-          <width>57</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>宋体</family>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>终止时间</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDateTimeEdit" name="end_time">
-        <property name="minimumSize">
-         <size>
-          <width>88</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>28</height>
-         </size>
-        </property>
-        <property name="accelerated">
-         <bool>true</bool>
-        </property>
-        <property name="displayFormat">
-         <string>yyyy-MM-dd</string>
-        </property>
-        <property name="calendarPopup">
-         <bool>true</bool>
-        </property>
+        <item>
+         <property name="text">
+          <string>1个月</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3个月</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>6个月</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1年</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2年</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3年</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -267,11 +228,7 @@ p, li { white-space: pre-wrap; }
            <number>0</number>
           </property>
           <item>
-           <layout class="QHBoxLayout" name="horizontal_layout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-           </layout>
+           <layout class="QVBoxLayout" name="vertical_layout"/>
           </item>
          </layout>
         </widget>
