@@ -3,4 +3,4 @@
 目前支持：单位净值，MACD查询。
 使用天天基金网接口获得基金历史信息。
 
-![sample](exsample.png)
+![sample](doc/exsample.png)
