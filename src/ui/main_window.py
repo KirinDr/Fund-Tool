@@ -83,7 +83,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.dea = None
         self.macd_bar = None
         self.query_button.clicked.connect(self.query)
-        self.macd.stateChanged.connect(self.repaint)
+        self.val_choose.toggled.connect(self.repaint)
+        self.macd_choose.toggled.connect(self.repaint)
+
+        self.init_box()
 
     def init_main_fig(self):
         for i in range(self.vertical_layout.count()):
@@ -92,7 +95,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.vertical_layout.addWidget(self.main_fig)
 
     def init_box(self):
-        self.macd.setChecked(False)
+        self.val_choose.setChecked(True)
+        self.macd_choose.setChecked(False)
 
     def get_code(self):
         return self.fund_code.toPlainText()
@@ -106,11 +110,11 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
     def reset_date(self, begin):
         begin = pd.to_datetime(begin, format='%Y/%m/%d')
-        self.ma12 = self.ma12[self.ma12['净值日期'] > begin]
-        self.ma26 = self.ma26[self.ma26['净值日期'] > begin]
-        self.dif = self.dif[self.dif['净值日期'] > begin]
-        self.dea = self.dea[self.dea['净值日期'] > begin]
-        self.macd_bar = self.macd_bar[self.macd_bar['净值日期'] > begin]
+        self.ma12 = self.ma12[self.ma12[DATE_FIELD] > begin]
+        self.ma26 = self.ma26[self.ma26[DATE_FIELD] > begin]
+        self.dif = self.dif[self.dif[DATE_FIELD] > begin]
+        self.dea = self.dea[self.dea[DATE_FIELD] > begin]
+        self.macd_bar = self.macd_bar[self.macd_bar[DATE_FIELD] > begin]
 
     def query(self):
         self.init_box()
@@ -135,17 +139,20 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.main_fig.finished(index)
 
     def repaint(self):
+        if self.df is None: return
+        print(self.val)
         self.init_main_fig()
-        if self.macd.isChecked():
-            self.set_main_fig(211, self.val['净值日期'], self.val['单位净值'], VAL_COLOR, VAL_LABEL)
-            self.set_main_fig(211, self.ma12['净值日期'], self.ma12['单位净值'], MA10_COLOR, MA10_LABEL)
-            self.set_main_fig(211, self.ma26['净值日期'], self.ma26['单位净值'], MA20_COLOR, MA20_LABEL)
-            self.show_fig(211)
-            self.set_main_fig(212, self.dif['净值日期'], self.dif['单位净值'], DIF_COLOR, DIF_LABEL)
-            self.set_main_fig(212, self.dea['净值日期'], self.dea['单位净值'], DEA_COLOR, DEA_LABEL)
-            self.main_fig.plot_bar(212, self.macd_bar['净值日期'], self.macd_bar['单位净值'])
-            self.show_fig(212)
-        else:
-            self.set_main_fig(111, self.val['净值日期'], self.val['单位净值'], VAL_COLOR, VAL_LABEL)
+        if self.val_choose.isChecked():
+            self.set_main_fig(111, self.val[DATE_FIELD], self.val['单位净值'], VAL_COLOR, VAL_LABEL)
+            self.set_main_fig(111, self.val[DATE_FIELD], self.val['累计净值'], SUM_VAL_COLOR, SUM_VAL_LABEL)
             self.show_fig(111)
+        elif self.macd_choose.isChecked():
+            self.set_main_fig(211, self.val[DATE_FIELD], self.val[VAL_FIELD], VAL_COLOR, SUM_VAL_LABEL)
+            self.set_main_fig(211, self.ma12[DATE_FIELD], self.ma12[VAL_FIELD], MA10_COLOR, MA10_LABEL)
+            self.set_main_fig(211, self.ma26[DATE_FIELD], self.ma26[VAL_FIELD], MA20_COLOR, MA20_LABEL)
+            self.show_fig(211)
+            self.set_main_fig(212, self.dif[DATE_FIELD], self.dif[VAL_FIELD], DIF_COLOR, DIF_LABEL)
+            self.set_main_fig(212, self.dea[DATE_FIELD], self.dea[VAL_FIELD], DEA_COLOR, DEA_LABEL)
+            self.main_fig.plot_bar(212, self.macd_bar[DATE_FIELD], self.macd_bar[VAL_FIELD])
+            self.show_fig(212)
 

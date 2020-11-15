@@ -207,7 +207,7 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>983</width>
+           <width>1014</width>
            <height>446</height>
           </rect>
          </property>
@@ -280,8 +280,14 @@ p, li { white-space: pre-wrap; }
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>11</number>
+          </property>
           <property name="leftMargin">
-           <number>20</number>
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
           </property>
           <item>
            <spacer name="verticalSpacer_2">
@@ -300,10 +306,10 @@ p, li { white-space: pre-wrap; }
            </spacer>
           </item>
           <item>
-           <widget class="QCheckBox" name="macd">
+           <widget class="QRadioButton" name="val_choose">
             <property name="minimumSize">
              <size>
-              <width>110</width>
+              <width>80</width>
               <height>0</height>
              </size>
             </property>
@@ -313,21 +319,27 @@ p, li { white-space: pre-wrap; }
               <pointsize>10</pointsize>
              </font>
             </property>
-            <property name="styleSheet">
-             <string notr="true">QCheckBox#checkBox{
-padding-left:25px;
-}
-
-</string>
+            <property name="text">
+             <string>净 值</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="macd_choose">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>宋体</family>
+              <pointsize>10</pointsize>
+             </font>
             </property>
             <property name="text">
              <string>MACD</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>16</width>
-              <height>16</height>
-             </size>
             </property>
            </widget>
           </item>

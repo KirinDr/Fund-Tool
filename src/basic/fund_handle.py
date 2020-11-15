@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from basic.notice_util import notice
 import matplotlib.pyplot as plt
+from basic.config import *
 # 中文设置
 plt.rcParams['font.sans-serif']=['SimHei']
 plt.rcParams['axes.unicode_minus']=False
@@ -79,17 +80,17 @@ def get_ma(n, df):
     sum_val = 0
     pre = 0
     for i in range(n - 1):
-        sum_val += df.iloc[i,].loc['单位净值']
+        sum_val += df.iloc[i,].loc[VAL_FIELD]
     for i in range(n, df.shape[0]):
-        sum_val += df.iloc[i,].loc['单位净值']
+        sum_val += df.iloc[i,].loc[VAL_FIELD]
         if i > n:
-            sum_val -= df.iloc[pre,].loc['单位净值']
+            sum_val -= df.iloc[pre,].loc[VAL_FIELD]
             pre += 1
-        date_time.append(df.iloc[i,].loc['净值日期'])
+        date_time.append(df.iloc[i,].loc[DATE_FIELD])
         ma.append(sum_val / n)
     n_df = pd.DataFrame()
-    n_df['净值日期'] = pd.to_datetime(date_time, format='%Y/%m/%d')
-    n_df['单位净值'] = ma
+    n_df[DATE_FIELD] = pd.to_datetime(date_time, format='%Y/%m/%d')
+    n_df[VAL_FIELD] = ma
 
     return n_df
 
@@ -98,19 +99,19 @@ def get_ma(n, df):
 def get_dif(ma12, ma26):
     # MA12和MA26时间对齐
     if ma12.shape[0] != ma26.shape[0]:
-        min_date = ma26.iloc[0,].loc['净值日期']
-        ma12 = ma12[ma12['净值日期'] >= min_date]
+        min_date = ma26.iloc[0,].loc[DATE_FIELD]
+        ma12 = ma12[ma12[DATE_FIELD] >= min_date]
 
     dif = []
     date_time = []
 
     for i in range(ma12.shape[0]):
-        date_time.append(ma12.iloc[i,].loc['净值日期'])
-        dif.append(ma12.iloc[i,].loc['单位净值'] - ma26.iloc[i,].loc['单位净值'])
+        date_time.append(ma12.iloc[i,].loc[DATE_FIELD])
+        dif.append(ma12.iloc[i,].loc[VAL_FIELD] - ma26.iloc[i,].loc[VAL_FIELD])
 
     n_df = pd.DataFrame()
-    n_df['净值日期'] = pd.to_datetime(date_time, format='%Y/%m/%d')
-    n_df['单位净值'] = dif
+    n_df[DATE_FIELD] = pd.to_datetime(date_time, format='%Y/%m/%d')
+    n_df[VAL_FIELD] = dif
     return n_df
 
 
@@ -122,19 +123,19 @@ def get_dea(dif):
 def get_macd_bar(dif, dea):
     # 时间对齐
     if dif.shape[0] != dea.shape[0]:
-        min_date = dea.iloc[0,].loc['净值日期']
-        dif = dif[dif['净值日期'] >= min_date]
+        min_date = dea.iloc[0,].loc[DATE_FIELD]
+        dif = dif[dif[DATE_FIELD] >= min_date]
 
     bar = []
     date_time = []
 
     for i in range(dif.shape[0]):
-        date_time.append(dif.iloc[i,].loc['净值日期'])
-        bar.append((dif.iloc[i,].loc['单位净值'] - dea.iloc[i,].loc['单位净值']) * 2)
+        date_time.append(dif.iloc[i,].loc[DATE_FIELD])
+        bar.append((dif.iloc[i,].loc[VAL_FIELD] - dea.iloc[i,].loc[VAL_FIELD]) * 2)
 
     n_df = pd.DataFrame()
-    n_df['净值日期'] = pd.to_datetime(date_time, format='%Y/%m/%d')
-    n_df['单位净值'] = bar
+    n_df[DATE_FIELD] = pd.to_datetime(date_time, format='%Y/%m/%d')
+    n_df[VAL_FIELD] = bar
     return n_df
 
 
