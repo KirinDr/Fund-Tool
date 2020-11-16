@@ -80,17 +80,17 @@ def get_ma(n, df):
     sum_val = 0
     pre = 0
     for i in range(n - 1):
-        sum_val += df.iloc[i,].loc[VAL_FIELD]
+        sum_val += df.iloc[i,].loc[SUM_VAL_FIELD]
     for i in range(n, df.shape[0]):
-        sum_val += df.iloc[i,].loc[VAL_FIELD]
+        sum_val += df.iloc[i,].loc[SUM_VAL_FIELD]
         if i > n:
-            sum_val -= df.iloc[pre,].loc[VAL_FIELD]
+            sum_val -= df.iloc[pre,].loc[SUM_VAL_FIELD]
             pre += 1
         date_time.append(df.iloc[i,].loc[DATE_FIELD])
         ma.append(sum_val / n)
     n_df = pd.DataFrame()
     n_df[DATE_FIELD] = pd.to_datetime(date_time, format='%Y/%m/%d')
-    n_df[VAL_FIELD] = ma
+    n_df[SUM_VAL_FIELD] = ma
 
     return n_df
 
@@ -107,11 +107,11 @@ def get_dif(ma12, ma26):
 
     for i in range(ma12.shape[0]):
         date_time.append(ma12.iloc[i,].loc[DATE_FIELD])
-        dif.append(ma12.iloc[i,].loc[VAL_FIELD] - ma26.iloc[i,].loc[VAL_FIELD])
+        dif.append(ma12.iloc[i,].loc[SUM_VAL_FIELD] - ma26.iloc[i,].loc[SUM_VAL_FIELD])
 
     n_df = pd.DataFrame()
     n_df[DATE_FIELD] = pd.to_datetime(date_time, format='%Y/%m/%d')
-    n_df[VAL_FIELD] = dif
+    n_df[SUM_VAL_FIELD] = dif
     return n_df
 
 
@@ -131,11 +131,11 @@ def get_macd_bar(dif, dea):
 
     for i in range(dif.shape[0]):
         date_time.append(dif.iloc[i,].loc[DATE_FIELD])
-        bar.append((dif.iloc[i,].loc[VAL_FIELD] - dea.iloc[i,].loc[VAL_FIELD]) * 2)
+        bar.append((dif.iloc[i,].loc[SUM_VAL_FIELD] - dea.iloc[i,].loc[SUM_VAL_FIELD]) * 2)
 
     n_df = pd.DataFrame()
     n_df[DATE_FIELD] = pd.to_datetime(date_time, format='%Y/%m/%d')
-    n_df[VAL_FIELD] = bar
+    n_df[SUM_VAL_FIELD] = bar
     return n_df
 
 

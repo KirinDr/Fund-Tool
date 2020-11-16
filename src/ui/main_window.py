@@ -140,19 +140,18 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
     def repaint(self):
         if self.df is None: return
-        print(self.val)
         self.init_main_fig()
         if self.val_choose.isChecked():
-            self.set_main_fig(111, self.val[DATE_FIELD], self.val['单位净值'], VAL_COLOR, VAL_LABEL)
-            self.set_main_fig(111, self.val[DATE_FIELD], self.val['累计净值'], SUM_VAL_COLOR, SUM_VAL_LABEL)
+            self.set_main_fig(111, self.val[DATE_FIELD], self.val[UNIT_VAL_FIELD], UNIT_VAL_COLOR, UNIT_VAL_LABEL)
+            self.set_main_fig(111, self.val[DATE_FIELD], self.val[SUM_VAL_FIELD], SUM_VAL_COLOR, SUM_VAL_LABEL)
             self.show_fig(111)
         elif self.macd_choose.isChecked():
-            self.set_main_fig(211, self.val[DATE_FIELD], self.val[VAL_FIELD], VAL_COLOR, SUM_VAL_LABEL)
-            self.set_main_fig(211, self.ma12[DATE_FIELD], self.ma12[VAL_FIELD], MA10_COLOR, MA10_LABEL)
-            self.set_main_fig(211, self.ma26[DATE_FIELD], self.ma26[VAL_FIELD], MA20_COLOR, MA20_LABEL)
+            self.set_main_fig(211, self.val[DATE_FIELD], self.val[SUM_VAL_FIELD], UNIT_VAL_COLOR, SUM_VAL_LABEL)
+            self.set_main_fig(211, self.ma12[DATE_FIELD], self.ma12[SUM_VAL_FIELD], MA10_COLOR, MA10_LABEL)
+            self.set_main_fig(211, self.ma26[DATE_FIELD], self.ma26[SUM_VAL_FIELD], MA20_COLOR, MA20_LABEL)
             self.show_fig(211)
-            self.set_main_fig(212, self.dif[DATE_FIELD], self.dif[VAL_FIELD], DIF_COLOR, DIF_LABEL)
-            self.set_main_fig(212, self.dea[DATE_FIELD], self.dea[VAL_FIELD], DEA_COLOR, DEA_LABEL)
-            self.main_fig.plot_bar(212, self.macd_bar[DATE_FIELD], self.macd_bar[VAL_FIELD])
+            self.set_main_fig(212, self.dif[DATE_FIELD], self.dif[SUM_VAL_FIELD], DIF_COLOR, DIF_LABEL)
+            self.set_main_fig(212, self.dea[DATE_FIELD], self.dea[SUM_VAL_FIELD], DEA_COLOR, DEA_LABEL)
+            self.main_fig.plot_bar(212, self.macd_bar[DATE_FIELD], self.macd_bar[SUM_VAL_FIELD])
             self.show_fig(212)
 

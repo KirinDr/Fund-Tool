@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-VAL_COLOR = 'b'
-VAL_LABEL = '单位净值'
+UNIT_VAL_COLOR = 'b'
+UNIT_VAL_LABEL = '单位净值'
 SUM_VAL_COLOR = 'g'
 SUM_VAL_LABEL = '累计净值'
 MA10_COLOR = 'k'
@@ -14,4 +14,5 @@ DEA_COLOR = 'b'
 DEA_LABEL = 'DEA'
 
 DATE_FIELD = '净值日期'
-VAL_FIELD = '累计净值'
+SUM_VAL_FIELD = '累计净值'
+UNIT_VAL_FIELD = '单位净值'
