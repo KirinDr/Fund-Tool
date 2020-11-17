@@ -16,10 +16,11 @@ from basic.config import *
 
 
 class MatplotWidget(FigureCanvas):
-    def __init__(self):
+    def __init__(self, title):
         self.fig = Figure()
         super(MatplotWidget, self).__init__(self.fig)
         self.pic = {}
+        self.fig.suptitle(title)
 
     def red_or_green(self, y):
         color = []
@@ -95,7 +96,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     def init_main_fig(self):
         for i in range(self.vertical_layout.count()):
             self.vertical_layout.itemAt(i).widget().deleteLater()
-        self.main_fig = MatplotWidget()
+        self.main_fig = MatplotWidget(get_fund_name(self.get_code()))
         self.vertical_layout.addWidget(self.main_fig)
 
     def init_box(self):
@@ -124,8 +125,15 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.dea = self.dea[self.dea[DATE_FIELD] > begin]
         self.macd_bar = self.macd_bar[self.macd_bar[DATE_FIELD] > begin]
 
+    def check_input(self):
+        if self.get_code() == '':
+            notice('code is null')
+            return False
+        return True
+
     def query(self):
         self.init_box()
+        if not self.check_input(): return
         code = self.get_code()
         begin, st, en = self.get_date()
         print('request for %s, from %s to %s' % (self.get_code(), st, en))

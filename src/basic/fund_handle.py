@@ -12,24 +12,24 @@ plt.rcParams['font.sans-serif']=['SimHei']
 plt.rcParams['axes.unicode_minus']=False
 
 
-def request(code, sdate, edate, page):
-    url = 'http://fund.eastmoney.com/f10/F10DataApi.aspx'
-    param = {
-                'type': 'lsjz',
-                'code': code,
-                'page': page,
-                'sdate': sdate,
-                'edate': edate,
-                'per': 20
-            }
+def request(url, param=None):
     r = requests.get(url=url, params=param)
     r.raise_for_status()
     return r.text
 
 
 def fund_information(code, sdate, edate, begin):
+    url = 'http://fund.eastmoney.com/f10/F10DataApi.aspx'
+    param = {
+        'type': 'lsjz',
+        'code': code,
+        'page': 1,
+        'sdate': sdate,
+        'edate': edate,
+        'per': 20
+    }
     begin = pd.to_datetime(begin, format='%Y/%m/%d')
-    ret = request(code, sdate, edate, 1)
+    ret = request(url, param)
     soup = BeautifulSoup(ret, 'html.parser')
 
     pages = re.search('pages:([0-9]+),', ret).group(1)
@@ -44,7 +44,8 @@ def fund_information(code, sdate, edate, begin):
 
     data = []
     for page in range(1, pages + 1):
-        html = request(code, sdate, edate, page)
+        param['page'] = page
+        html = request(url, param)
         soup = BeautifulSoup(html, 'html.parser')
         for tag in soup.find_all('tbody')[0].find_all('tr'):
             row_data = []
@@ -68,6 +69,27 @@ def fund_information(code, sdate, edate, begin):
     df.sort_index(ascending=True, inplace=True)
 
     return df, df[df['净值日期'] >= begin]
+
+
+def fund_list():
+    url = 'http://fund.eastmoney.com/js/fundcode_search.js'
+    res = request(url)
+    fund_ls = re.search('var r = (.*?);', res).group(1)
+    fund_ls = np.array(eval(fund_ls))
+    fund_dict = {}
+    fund_dict['code'] = fund_ls[:,0]
+    fund_dict['ch_name'] = fund_ls[:, 2]
+    fund_dict['code'] = fund_dict['code'].astype(str)
+    df = pd.DataFrame(fund_dict, index=fund_ls[:,0])
+    return df
+
+
+Main_Control = fund_list()
+
+
+def get_fund_name(code):
+    code = str(code)
+    return Main_Control.loc[code,].loc['ch_name']
 
 
 def get_ma(n, df):
@@ -137,5 +159,7 @@ def get_macd_bar(dif, dea):
     n_df[SUM_VAL_FIELD] = bar
     return n_df
 
+
+fund_list()
 
 

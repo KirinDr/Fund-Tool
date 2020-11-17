@@ -22,3 +22,4 @@ MA20_LABEL = 'MA20'
 DATE_FIELD = '净值日期'
 SUM_VAL_FIELD = '累计净值'
 UNIT_VAL_FIELD = '单位净值'
+
