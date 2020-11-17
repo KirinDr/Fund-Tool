@@ -36,7 +36,7 @@ def fund_information(code, sdate, edate, begin):
     pages = int(pages)
     if pages <= 0:
         notice('no response')
-        return None
+        return None, None
 
     headers = []
     for head in soup.find_all('th'):
