@@ -79,15 +79,14 @@ def get_ma(n, df):
 
     sum_val = 0
     pre = 0
-    for i in range(n - 1):
+    for i in range(0, df.shape[0]):
         sum_val += df.iloc[i,].loc[SUM_VAL_FIELD]
-    for i in range(n, df.shape[0]):
-        sum_val += df.iloc[i,].loc[SUM_VAL_FIELD]
-        if i > n:
+        if i >= n:
             sum_val -= df.iloc[pre,].loc[SUM_VAL_FIELD]
             pre += 1
-        date_time.append(df.iloc[i,].loc[DATE_FIELD])
-        ma.append(sum_val / n)
+        if i >= n - 1:
+            date_time.append(df.iloc[i,].loc[DATE_FIELD])
+            ma.append(sum_val / n)
     n_df = pd.DataFrame()
     n_df[DATE_FIELD] = pd.to_datetime(date_time, format='%Y/%m/%d')
     n_df[SUM_VAL_FIELD] = ma

@@ -79,12 +79,16 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.df = None
         self.ma12 = None
         self.ma26 = None
+        self.ma5 = None
+        self.ma10 = None
+        self.ma20 = None
         self.dif = None
         self.dea = None
         self.macd_bar = None
         self.query_button.clicked.connect(self.query)
         self.val_choose.toggled.connect(self.repaint)
         self.macd_choose.toggled.connect(self.repaint)
+        self.ma_choose.toggled.connect(self.repaint)
 
         self.init_box()
 
@@ -96,6 +100,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
     def init_box(self):
         self.val_choose.setChecked(True)
+        self.macd_choose.setChecked(False)
         self.macd_choose.setChecked(False)
 
     def get_code(self):
@@ -110,6 +115,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
     def reset_date(self, begin):
         begin = pd.to_datetime(begin, format='%Y/%m/%d')
+        self.ma5 = self.ma5[self.ma5[DATE_FIELD] > begin]
+        self.ma10 = self.ma10[self.ma10[DATE_FIELD] > begin]
+        self.ma20 = self.ma20[self.ma20[DATE_FIELD] > begin]
         self.ma12 = self.ma12[self.ma12[DATE_FIELD] > begin]
         self.ma26 = self.ma26[self.ma26[DATE_FIELD] > begin]
         self.dif = self.dif[self.dif[DATE_FIELD] > begin]
@@ -123,6 +131,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         print('request for %s, from %s to %s' % (self.get_code(), st, en))
         self.df, self.val = fund_information(code, st, en, begin)
         if self.df is not None:
+            self.ma5 = get_ma(5, self.df)
+            self.ma10 = get_ma(10, self.df)
+            self.ma20 = get_ma(20, self.df)
             self.ma12 = get_ma(12, self.df)
             self.ma26 = get_ma(26, self.df)
             self.dif = get_dif(self.ma12, self.ma26)
@@ -142,16 +153,22 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         if self.df is None: return
         self.init_main_fig()
         if self.val_choose.isChecked():
-            self.set_main_fig(111, self.val[DATE_FIELD], self.val[UNIT_VAL_FIELD], UNIT_VAL_COLOR, UNIT_VAL_LABEL)
             self.set_main_fig(111, self.val[DATE_FIELD], self.val[SUM_VAL_FIELD], SUM_VAL_COLOR, SUM_VAL_LABEL)
+            self.set_main_fig(111, self.val[DATE_FIELD], self.val[UNIT_VAL_FIELD], UNIT_VAL_COLOR, UNIT_VAL_LABEL)
             self.show_fig(111)
         elif self.macd_choose.isChecked():
-            self.set_main_fig(211, self.val[DATE_FIELD], self.val[SUM_VAL_FIELD], UNIT_VAL_COLOR, SUM_VAL_LABEL)
-            self.set_main_fig(211, self.ma12[DATE_FIELD], self.ma12[SUM_VAL_FIELD], MA10_COLOR, MA10_LABEL)
-            self.set_main_fig(211, self.ma26[DATE_FIELD], self.ma26[SUM_VAL_FIELD], MA20_COLOR, MA20_LABEL)
+            self.set_main_fig(211, self.val[DATE_FIELD], self.val[SUM_VAL_FIELD], SUM_VAL_COLOR, SUM_VAL_LABEL)
+            self.set_main_fig(211, self.ma12[DATE_FIELD], self.ma12[SUM_VAL_FIELD], MA12_COLOR, MA12_LABEL)
+            self.set_main_fig(211, self.ma26[DATE_FIELD], self.ma26[SUM_VAL_FIELD], MA26_COLOR, MA26_LABEL)
             self.show_fig(211)
             self.set_main_fig(212, self.dif[DATE_FIELD], self.dif[SUM_VAL_FIELD], DIF_COLOR, DIF_LABEL)
             self.set_main_fig(212, self.dea[DATE_FIELD], self.dea[SUM_VAL_FIELD], DEA_COLOR, DEA_LABEL)
             self.main_fig.plot_bar(212, self.macd_bar[DATE_FIELD], self.macd_bar[SUM_VAL_FIELD])
             self.show_fig(212)
+        elif self.ma_choose.isChecked():
+            self.set_main_fig(111, self.val[DATE_FIELD], self.val[SUM_VAL_FIELD], SUM_VAL_COLOR, SUM_VAL_LABEL)
+            self.set_main_fig(111, self.ma5[DATE_FIELD], self.ma5[SUM_VAL_FIELD], MA5_COLOR, MA5_LABEL)
+            self.set_main_fig(111, self.ma10[DATE_FIELD], self.ma10[SUM_VAL_FIELD], MA10_COLOR, MA10_LABEL)
+            self.set_main_fig(111, self.ma20[DATE_FIELD], self.ma20[SUM_VAL_FIELD], MA20_COLOR, MA20_LABEL)
+            self.show_fig(111)
 
