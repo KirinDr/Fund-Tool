@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 import numpy as np
 import pandas as pd
-from basic.notice_util import notice
+from basic.utils import notice
 import matplotlib.pyplot as plt
 from basic.config import *
 # 中文设置

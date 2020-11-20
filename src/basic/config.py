@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 
 UNIT_VAL_COLOR = 'r'
 UNIT_VAL_LABEL = '单位净值'
@@ -23,3 +24,7 @@ DATE_FIELD = '净值日期'
 SUM_VAL_FIELD = '累计净值'
 UNIT_VAL_FIELD = '单位净值'
 
+
+# 路径
+BASIC_PATH = os.getcwd()
+LOCAL_CODE = 'localcode.ft'

@@ -11,7 +11,7 @@ matplotlib.use("Qt5Agg")
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from basic.fund_handle import *
-from basic.notice_util import notice
+from basic.utils import *
 from basic.config import *
 
 
@@ -86,18 +86,27 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.dif = None
         self.dea = None
         self.macd_bar = None
-        self.query_button.clicked.connect(self.query)
+        self.query_button.clicked.connect(lambda :self.query())
         self.val_choose.toggled.connect(self.repaint)
         self.macd_choose.toggled.connect(self.repaint)
         self.ma_choose.toggled.connect(self.repaint)
+        self.localcodes_box.currentIndexChanged.connect(self.localcodes_query)
 
         self.init_box()
+        self.init_local_codes()
 
     def init_main_fig(self):
         for i in range(self.vertical_layout.count()):
             self.vertical_layout.itemAt(i).widget().deleteLater()
         self.main_fig = MatplotWidget(get_fund_name(self.get_code()))
         self.vertical_layout.addWidget(self.main_fig)
+
+    def init_local_codes(self):
+        codes = read_local_code()
+        self.localcodes_box.addItem('')
+        for code in codes:
+            code = code + " " + get_fund_name(code)
+            self.localcodes_box.addItem(code)
 
     def init_box(self):
         self.val_choose.setChecked(True)
@@ -133,10 +142,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
     def query(self):
         self.init_box()
-        if not self.check_input(): return
         code = self.get_code()
+        if not self.check_input(): return
         begin, st, en = self.get_date()
-        print('request for %s, from %s to %s' % (self.get_code(), st, en))
+        print('request for %s, from %s to %s' % (code, st, en))
         self.df, self.val = fund_information(code, st, en, begin)
         if self.df is not None:
             self.ma5 = get_ma(5, self.df)
@@ -149,6 +158,12 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.macd_bar = get_macd_bar(self.dif, self.dea)
             self.reset_date(begin)
             self.repaint()
+
+    def localcodes_query(self):
+        code = self.localcodes_box.currentText()
+        if code != '':
+            code = code.split(' ')[0]
+            self.fund_code.setText(code)
 
     def set_main_fig(self, index, x, y, color, label):
         if (x is not None) and (y is not None):

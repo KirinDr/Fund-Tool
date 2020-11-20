@@ -113,6 +113,11 @@ p, li { white-space: pre-wrap; }
           <height>27</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <family>宋体</family>
+         </font>
+        </property>
         <item>
          <property name="text">
           <string>1个月</string>
@@ -143,6 +148,43 @@ p, li { white-space: pre-wrap; }
           <string>3年</string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="minimumSize">
+         <size>
+          <width>57</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>宋体</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>本地保存</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="localcodes_box">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>27</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>宋体</family>
+         </font>
+        </property>
        </widget>
       </item>
       <item>
