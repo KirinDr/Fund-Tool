@@ -26,5 +26,5 @@ UNIT_VAL_FIELD = '单位净值'
 
 
 # 路径
-BASIC_PATH = os.getcwd()
+BASIC_PATH = os.path.abspath(os.path.dirname(__file__))
 LOCAL_CODE = 'localcode.ft'
